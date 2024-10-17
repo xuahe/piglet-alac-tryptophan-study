@@ -3,4 +3,4 @@
 * Raw data:
 
 * Figures:
-[Fig1A](https://<username>.github.io/<repository>/Figure_1/Fig1A_Formula_comp.html)
+[Fig1A](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_1/Fig1A_Formula_comp.html)
