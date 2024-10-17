@@ -9,8 +9,8 @@ This repository contains R scripts used for data analysis in "The role of α-lac
 [Fig1A](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_1/Fig1A_Formula_comp.html)
 
 #### Figure 2:
-[Fig2A-F](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_2/Fig2A-F_Postprandial_response.html)
-[Fig2G](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_2/Fig2G_Postprandial_Trp_individual_lineplots.html)
+[Fig2A-F](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_2/Fig2A-F_Postprandial_response.html), 
+[Fig2G](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_2/Fig2G_Postprandial_Trp_individual_lineplots.html), 
 [Fig2H](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_2/Fig2H_Postprandial_Trp_at_120min_intake_relationship.html)
 
 #### Figure 3
