@@ -1,6 +1,11 @@
-# The role of α-lactalbumin in modulating tryptophan metabolism and serotonin synthesis: insights from neonatal piglets
+## The role of α-lactalbumin in modulating tryptophan metabolism and serotonin synthesis: insights from neonatal piglets
 
-* Raw data:
+### Raw data:
 
-* Figures:
+### Figures:
+
+#### Figure 1:
 [Fig1A](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_1/Fig1A_Formula_comp.html)
+
+
+### Supplementary materials
