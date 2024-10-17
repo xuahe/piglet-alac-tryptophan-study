@@ -1,0 +1,77 @@
+---
+title: 'Fig1A. Formula composition'
+author: "Xuan He"
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output:
+  html_document: 
+    toc: true
+    toc_depth: 3
+  html_notebook: 
+    toc: true
+    toc_depth: 3
+---
+<style type="text/css">
+body{ /* Normal  */ font-size: 12px;}
+td {  /* Table  */ font-size: 10px;}
+h1.title {font-size: 22px; color: DarkRed; font-style: bold;}
+h1 { /* Header 1 */ font-size: 16px; color: mediumblue; font-style: bold;}
+h2 { /* Header 2 */ font-size: 13px; color: mediumblue; font-style: bold;}
+h3 { /* Header 3 */ font-size: 11px; font-family: "Times New Roman", Times, serif; color: mediumblue;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 12px;}
+</style>
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/xuanhe89/Documents/WorkSpace/Research projects/Lactation/ALAC/Manuscripts/Paper #1/Figures and Tables R codes')
+
+```
+
+
+# Clean up the environment
+```{r}
+rm(list = ls())
+```
+
+
+# Load required libraries for data reading, plotting, and data manipulation
+```{r message=FALSE}
+library(readxl)       # For reading Excel files to import data
+library(ggpubr)       # For creating publication-ready plots and charts
+library(dplyr)        # For data manipulation
+library(ggh4x)        # For advanced facetting functions in ggplot2
+```
+
+
+# Load data
+```{r}
+DietComp <- read_excel("Data/Data.xlsx", sheet = "DietComp")
+```
+
+
+# Figure generation
+```{r fig.height=3.5, fig.width=7, warning=FALSE}
+Fig <- DietComp %>% mutate(Type = factor(Type, levels = c("Protein", "AA", "Ratio"))) %>%
+          mutate(Diet = factor(Diet, levels = c("ALAC diet", "WPI diet", "Sow milk"),
+                                        labels = c("ALAC formula", "WPI formula", "Sow milk"))) %>%
+          ggdotchart(x = "Variable", y = "Value", 
+                     color = "Diet", 
+                     palette = c("turquoise3","purple", "orange"),
+                     shape = 16, dot.size = 4,
+                     xlab = "", ylab = "", add = "segments", position = position_dodge(0.1), rotate = TRUE) + 
+                     facet_grid2(Type ~., scales = "free", independent = "x", space = "free_y") +
+                     scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+                     theme(strip.background = element_blank(), 
+                           strip.text.y = element_blank())
+
+# save the figure to a pdf file:
+ggsave(plot=Fig, height=3.5, width=7, dpi=300, filename="Figure 1/Fig1A.pdf", useDingbats=FALSE)
+
+Fig
+```
+
+
+
+```{r}
+sessionInfo()
+```
