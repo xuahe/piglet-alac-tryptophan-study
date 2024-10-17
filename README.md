@@ -1,7 +1,7 @@
 ## Analysis of α-Lactalbumin Impact on Tryptophan Metabolism
 This repository contains R scripts used for data analysis in "The role of α-lactalbumin in modulating tryptophan metabolism and serotonin synthesis: insights from neonatal piglets"
 
-### Data:
+### Data file:
 [Data](https://xuahe.github.io/piglet-aLac-tryptophan-study/Data/Data.xlsx)
 
 ### Figures:
