@@ -11,7 +11,7 @@
 
 <meta name="author" content="Xuan He" />
 
-<meta name="date" content="2024-10-07" />
+<meta name="date" content="2024-10-17" />
 
 <title>Fig4B. Trp metabolites correlation</title>
 
@@ -576,7 +576,7 @@ display: none;
 
 <h1 class="title toc-ignore">Fig4B. Trp metabolites correlation</h1>
 <h4 class="author">Xuan He</h4>
-<h4 class="date">October 07, 2024</h4>
+<h4 class="date">October 17, 2024</h4>
 
 </div>
 
@@ -618,8 +618,6 @@ library(dplyr)        # For data manipulation
 library(rstatix)      # For statistical tests and adding significance markers
 library(knitr)        # For displaying tibbles in a nice table format
 library(kableExtra)   # For enhancing table formatting</code></pre>
-<pre><code>## Warning in !is.null(rmarkdown::metadata$output) &amp;&amp; rmarkdown::metadata$output
-## %in% : &#39;length(x) = 2 &gt; 1&#39; in coercion to &#39;logical(1)&#39;</code></pre>
 </div>
 <div id="load-data" class="section level1">
 <h1>Load data</h1>
@@ -642,65 +640,34 @@ ls.brain.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &qu
 ls.urine.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Quinolinate&quot;, &quot;Niacinamide&quot;, &quot;1-Methylnicotinamide&quot;, &quot;3-Indoxylsulfate&quot;, &quot;N-Methyl-2-pyridone-5-carboxamide&quot;)</code></pre>
 <pre class="r"><code>Data.serum &lt;- Serum %&gt;% 
                 select(PigID, all_of(ls.serum.metabolites)) %&gt;%
-                rename_with(~ paste0(&quot;Serum_&quot;, .), ls.serum.metabolites)</code></pre>
-<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-## ℹ Please use `all_of()` or `any_of()` instead.
-##   # Was:
-##   data %&gt;% select(ls.serum.metabolites)
-## 
-##   # Now:
-##   data %&gt;% select(all_of(ls.serum.metabolites))
-## 
-## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<pre class="r"><code>Data.liver &lt;- Liver %&gt;% 
+                rename_with(~ paste0(&quot;Serum_&quot;, .), all_of(ls.serum.metabolites))
+
+Data.liver &lt;- Liver %&gt;% 
                 select(PigID, all_of(ls.liver.metabolites)) %&gt;%
-                rename_with(~ paste0(&quot;Liver_&quot;, .), ls.liver.metabolites)</code></pre>
-<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-## ℹ Please use `all_of()` or `any_of()` instead.
-##   # Was:
-##   data %&gt;% select(ls.liver.metabolites)
-## 
-##   # Now:
-##   data %&gt;% select(all_of(ls.liver.metabolites))
-## 
-## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<pre class="r"><code>Data.hippocampus &lt;- Brain %&gt;% 
+                rename_with(~ paste0(&quot;Liver_&quot;, .), all_of(ls.liver.metabolites))
+
+
+Data.hippocampus &lt;- Brain %&gt;% 
                       filter(Region == &quot;Hippocampus&quot;) %&gt;%
                       select(PigID, all_of(ls.brain.metabolites)) %&gt;%
-                      rename_with(~ paste0(&quot;Hippocampus_&quot;, .), ls.brain.metabolites)</code></pre>
-<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-## ℹ Please use `all_of()` or `any_of()` instead.
-##   # Was:
-##   data %&gt;% select(ls.brain.metabolites)
-## 
-##   # Now:
-##   data %&gt;% select(all_of(ls.brain.metabolites))
-## 
-## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<pre class="r"><code>Data.hypothalamus &lt;- Brain %&gt;% 
+                      rename_with(~ paste0(&quot;Hippocampus_&quot;, .), all_of(ls.brain.metabolites))
+
+
+Data.hypothalamus &lt;- Brain %&gt;% 
                         filter(Region == &quot;Hypothalamus&quot;) %&gt;%
                         select(PigID, all_of(ls.brain.metabolites)) %&gt;%
-                        rename_with(~ paste0(&quot;Hypothalamus_&quot;, .), ls.brain.metabolites)
+                        rename_with(~ paste0(&quot;Hypothalamus_&quot;, .), all_of(ls.brain.metabolites))
 
 Data.PFC &lt;- Brain %&gt;% 
               filter(Region == &quot;PFC&quot;) %&gt;%
               select(PigID, all_of(ls.brain.metabolites)) %&gt;%
-              rename_with(~ paste0(&quot;PFC_&quot;, .), ls.brain.metabolites)
+              rename_with(~ paste0(&quot;PFC_&quot;, .), all_of(ls.brain.metabolites))
 
 
 Data.striatum &lt;- Brain %&gt;% 
                     filter(Region == &quot;Striatum&quot;) %&gt;%
                     select(PigID, all_of(ls.brain.metabolites)) %&gt;%
-                    rename_with(~ paste0(&quot;Striatum_&quot;, .), ls.brain.metabolites)
+                    rename_with(~ paste0(&quot;Striatum_&quot;, .), all_of(ls.brain.metabolites))
 
 
 #Calculate effective osmolality
@@ -709,19 +676,7 @@ Effective.Osmolality &lt;- Urine$`Urine osmolality` - (Urine$Urea/1000)
 Data.urine &lt;- Urine %&gt;% mutate(across(everything(), ~ .x / Effective.Osmolality * 100)) %&gt;% # Adjust metabolite concentrations based on effective osmolality
                           mutate(PigID = Urine$PigID) %&gt;%  # Adding PigID to Data.urine0
                           select(PigID, all_of(ls.urine.metabolites)) %&gt;%
-                          rename_with(~ paste0(&quot;Urine_&quot;, .), ls.urine.metabolites)</code></pre>
-<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-## ℹ Please use `all_of()` or `any_of()` instead.
-##   # Was:
-##   data %&gt;% select(ls.urine.metabolites)
-## 
-##   # Now:
-##   data %&gt;% select(all_of(ls.urine.metabolites))
-## 
-## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
+                          rename_with(~ paste0(&quot;Urine_&quot;, .), all_of(ls.urine.metabolites))</code></pre>
 <pre class="r"><code>Data.all &lt;- inner_join(Data.serum, Data.liver, by = &quot;PigID&quot;) %&gt;%
               inner_join(Data.hippocampus, by = &quot;PigID&quot;) %&gt;%
               inner_join(Data.hypothalamus, by = &quot;PigID&quot;) %&gt;%
@@ -1123,23 +1078,23 @@ Spearman
 ## 
 ## other attached packages:
 ## [1] kableExtra_1.3.4 knitr_1.45       rstatix_0.7.2    dplyr_1.1.3     
-## [5] ggpubr_0.6.0     ggplot2_3.4.4    readxl_1.4.3    
+## [5] ggpubr_0.6.0     ggplot2_3.5.1    readxl_1.4.3    
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] tidyselect_1.2.0  xfun_0.40         bslib_0.5.1       purrr_1.0.2      
-##  [5] carData_3.0-5     colorspace_2.1-0  vctrs_0.6.4       generics_0.1.3   
-##  [9] viridisLite_0.4.2 htmltools_0.5.6.1 yaml_2.3.7        utf8_1.2.3       
-## [13] rlang_1.1.1       jquerylib_0.1.4   pillar_1.9.0      glue_1.6.2       
-## [17] withr_2.5.2       lifecycle_1.0.4   stringr_1.5.1     munsell_0.5.0    
-## [21] ggsignif_0.6.4    gtable_0.3.4      cellranger_1.1.0  rvest_1.0.3      
-## [25] evaluate_0.23     fastmap_1.1.1     fansi_1.0.5       highr_0.10       
-## [29] broom_1.0.5       scales_1.2.1      backports_1.4.1   cachem_1.0.8     
-## [33] webshot_0.5.5     jsonlite_1.8.7    abind_1.4-5       systemfonts_1.0.5
-## [37] digest_0.6.33     stringi_1.7.12    grid_4.2.2        cli_3.6.1        
+##  [5] carData_3.0-5     colorspace_2.1-0  vctrs_0.6.5       generics_0.1.3   
+##  [9] viridisLite_0.4.2 htmltools_0.5.6.1 yaml_2.3.7        utf8_1.2.4       
+## [13] rlang_1.1.2       jquerylib_0.1.4   pillar_1.9.0      glue_1.6.2       
+## [17] withr_3.0.1       lifecycle_1.0.4   stringr_1.5.1     munsell_0.5.1    
+## [21] ggsignif_0.6.4    gtable_0.3.5      cellranger_1.1.0  rvest_1.0.3      
+## [25] evaluate_1.0.1    fastmap_1.1.1     fansi_1.0.6       highr_0.10       
+## [29] broom_1.0.5       scales_1.3.0      backports_1.4.1   cachem_1.0.8     
+## [33] webshot_0.5.5     jsonlite_1.8.8    abind_1.4-5       systemfonts_1.0.5
+## [37] digest_0.6.33     stringi_1.7.12    grid_4.2.2        cli_3.6.2        
 ## [41] tools_4.2.2       magrittr_2.0.3    sass_0.4.7        tibble_3.2.1     
-## [45] crayon_1.5.2      tidyr_1.3.0       car_3.1-2         pkgconfig_2.0.3  
-## [49] xml2_1.3.5        rmarkdown_2.25    svglite_2.1.2     httr_1.4.7       
-## [53] rstudioapi_0.15.0 R6_2.5.1          compiler_4.2.2</code></pre>
+## [45] tidyr_1.3.0       car_3.1-2         pkgconfig_2.0.3   xml2_1.3.5       
+## [49] rmarkdown_2.28    svglite_2.1.2     httr_1.4.7        rstudioapi_0.15.0
+## [53] R6_2.5.1          compiler_4.2.2</code></pre>
 </div>
 
 
