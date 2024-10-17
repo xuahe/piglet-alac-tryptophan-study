@@ -36,7 +36,7 @@ This repository contains R scripts used for data analysis in "The role of α-lac
 [Fig6C](https://xuahe.github.io/piglet-aLac-tryptophan-study/Figure_6/Fig6C_Cortisol.html)
 
 
-### Supplementary materials
+### Supplementary materials:
 [SI Fig1](https://xuahe.github.io/piglet-aLac-tryptophan-study/SI_Figure_1/SI.Fig1_Weight_and_intake.html), 
 [SI Fig2](https://xuahe.github.io/piglet-aLac-tryptophan-study/SI_Figure_2/SI.Fig2_Hb_and_Hct.html), 
 [SI Fig3](https://xuahe.github.io/piglet-aLac-tryptophan-study/SI_Figure_3/SI.Fig3_hormones.html), 
