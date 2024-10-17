@@ -1,0 +1,159 @@
+---
+title: 'SI Fig 1. Weight and intake'
+author: "Xuan He"
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output:
+  html_document: 
+    toc: true
+    toc_depth: 3
+  html_notebook: 
+    toc: true
+    toc_depth: 3
+---
+<style type="text/css">
+body{ /* Normal  */ font-size: 12px;}
+td {  /* Table  */ font-size: 10px;}
+h1.title {font-size: 22px; color: DarkRed; font-style: bold;}
+h1 { /* Header 1 */ font-size: 16px; color: mediumblue; font-style: bold;}
+h2 { /* Header 2 */ font-size: 13px; color: mediumblue; font-style: bold;}
+h3 { /* Header 3 */ font-size: 11px; font-family: "Times New Roman", Times, serif; color: mediumblue;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 12px;}
+</style>
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/xuanhe89/Documents/WorkSpace/Research projects/Lactation/ALAC/Manuscripts/Paper #1/Figures and Tables R codes')
+
+```
+
+
+# Clean up the environment
+```{r}
+rm(list = ls())
+```
+
+
+# Load libraries for data reading, plotting and statistical analysis
+```{r message=FALSE}
+library(readxl)       # For reading Excel files
+library(ggpubr)       # For creating publication-ready plots
+library(dplyr)        # For data manipulation
+library(rstatix)      # For statistical tests and adding significance markers
+library(knitr)        # For displaying tibbles in a nicely formatted table
+library(kableExtra)   # For enhancing table formatting
+```
+
+
+# Load data
+```{r}
+# Load pig information, weight and intake data
+PigInfo <- read_excel("Data/Data.xlsx", sheet = "PigInfo")
+Weight <- read_excel("Data/Data.xlsx", sheet = "Weight")
+Intake <- read_excel("Data/Data.xlsx", sheet = "Formula_intake")
+```
+
+
+# Weight
+## Plot weight over time
+```{r}
+Fig1 <- Weight %>% inner_join(PigInfo, by = "PigID") %>% 
+                    filter(Timepoint_PD > 3) %>%
+                    mutate(Diet = factor(Diet, levels = c("ALAC", "WPI", "SF"))) %>%
+                    na.omit() %>%
+                    ggline(y = "Weight_kg", x = "Timepoint_PD", color = "Diet", palette = c("turquoise3","purple", "orange"),
+                           xlab = "Postnatal day", ylab = "Body weight (kg)", position = position_dodge(0.3), size = 0.7,
+                           add = "mean_se") 
+Fig1
+```
+
+
+## Statistical analysis: overall difference via Tukey HSD
+```{r}
+Weight.during.feeding <- Weight %>% inner_join(PigInfo, by = "PigID") %>% 
+                           filter(Timepoint_PD > 4) %>%
+                           mutate(Diet = factor(Diet, levels = c("ALAC", "WPI", "SF"))) %>%
+                           mutate(Timepoint_PD = factor(Timepoint_PD))%>%
+                           na.omit()
+
+# Perform Tukey's HSD test
+Weight.during.feeding %>% 
+  tukey_hsd(Weight_kg ~ Diet + Timepoint_PD + SowID) %>% # Perform Tukey's HSD test
+  filter(term == "Diet") %>%
+  kable() %>% # Print the tibble in a nicely formatted table
+  kable_styling(bootstrap_options = c("striped", "hover")) # Enhance table formatting with kableExtra
+```
+
+## Statistical analysis: difference at enrollment, adjusting for litter effect
+```{r}
+Weight.at.baseline <- Weight %>% inner_join(PigInfo, by = "PigID") %>% 
+                        filter(Timepoint_PD == 4) %>%
+                        na.omit()
+
+Weight.at.baseline %>% 
+  tukey_hsd(Weight_kg ~ Diet + SowID) %>% # Perform Tukey's HSD test
+  filter(term == "Diet") %>%
+  kable() %>% # Print the tibble in a nicely formatted table
+  kable_styling(bootstrap_options = c("striped", "hover")) # Enhance table formatting with kableExtra
+```
+## Statistical analysis: cross-sectional difference during feeding period
+```{r}
+Weight.during.feeding %>% 
+  group_by(Timepoint_PD) %>% 
+  tukey_hsd(Weight_kg ~ Diet + SowID) %>% # Perform Tukey's HSD test
+  filter(term == "Diet") %>% 
+  filter(p.adj.signif != "ns") %>% #only show pairs that are not significantly different
+  kable() %>% # Print the tibble in a nicely formatted table
+  kable_styling(bootstrap_options = c("striped", "hover")) # Enhance table formatting with kableExtra
+```
+
+
+# Intake
+
+## # Plot formula intake normalized by weight
+```{r}
+Fig2 <- inner_join(Weight, Intake, by = join_by(Timepoint_PD, PigID)) %>%
+            mutate(Weighted_intake = Formula_intake_g/Weight_kg) %>% # Normalize intake by weight
+            select(PigID, Timepoint_PD, Weighted_intake) %>%
+            inner_join(PigInfo, by = "PigID") %>% 
+            mutate(Diet = factor(Diet, levels = c("ALAC", "WPI"))) %>%
+            na.omit() %>%
+            filter(Timepoint_PD > 6) %>%
+            ggline(y = "Weighted_intake", x = "Timepoint_PD", color = "Diet", palette = c("turquoise3","purple"), size = 0.7,
+                   xlab = "Postnatal day", ylab = "Formula intake (g per kg body weight)", position = position_dodge(0.2),
+                   add = "mean_se") 
+Fig2
+```
+
+## Statistical analysis: cross-sectional difference, adjusting for litter effect
+```{r}
+inner_join(Weight, Intake, by = join_by(Timepoint_PD, PigID)) %>%
+              mutate(Weighted_intake = Formula_intake_g/Weight_kg) %>%
+              select(PigID, Timepoint_PD, Weighted_intake) %>%
+              inner_join(PigInfo, by = "PigID") %>% 
+              na.omit() %>%
+              filter(Timepoint_PD > 6) %>%
+              mutate(Timepoint_PD = factor(Timepoint_PD)) %>% 
+              group_by(Timepoint_PD) %>% 
+              anova_test(Weighted_intake ~ Diet + SowID, type = 1) %>%
+              as_tibble() %>%
+              filter(Effect == "Diet") %>%
+              filter(`p<.05` == "*") %>% # Only displace significance
+              kable() %>% # Print the tibble in a nicely formatted table
+              kable_styling(bootstrap_options = c("striped", "hover")) # Enhance table formatting with kableExtra
+
+```
+
+
+# Final plot
+```{r fig.width=10, fig.height=4}
+Fig.all <- ggarrange(Fig1, Fig2, common.legend = TRUE)
+
+Fig.all
+# Save the figure in pdf:
+ggsave(plot=Fig.all, height=4, width=10, dpi=300, filename="SI Figure 1/SI.Fig1.pdf", useDingbats=FALSE)
+```
+
+```{r}
+sessionInfo()
+```
