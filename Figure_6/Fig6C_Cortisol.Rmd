@@ -1,0 +1,107 @@
+---
+title: 'Fig6C. Cortisol'
+author: "Xuan He"
+date: '`r format(Sys.time(), "%B %d, %Y")`'
+output:
+  html_document: 
+    toc: true
+    toc_depth: 3
+  html_notebook: 
+    toc: true
+    toc_depth: 3
+---
+<style type="text/css">
+body{ /* Normal  */ font-size: 12px;}
+td {  /* Table  */ font-size: 10px;}
+h1.title {font-size: 22px; color: DarkRed; font-style: bold;}
+h1 { /* Header 1 */ font-size: 16px; color: mediumblue; font-style: bold;}
+h2 { /* Header 2 */ font-size: 13px; color: mediumblue; font-style: bold;}
+h3 { /* Header 3 */ font-size: 11px; font-family: "Times New Roman", Times, serif; color: mediumblue;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 12px;}
+</style>
+
+```{r setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/xuanhe89/Documents/WorkSpace/Research projects/Lactation/ALAC/Manuscripts/Paper #1/Figures and Tables R codes')
+```
+
+
+# Clean up the environment
+```{r}
+rm(list = ls())
+```
+
+
+# Load necessary libraries for data reading, plotting, and statistical analysis
+```{r message=FALSE}
+library(readxl)       # For reading Excel files
+library(ggpubr)       # For creating publication-ready plots
+library(dplyr)        # For data manipulation
+library(ggh4x)        # For advanced faceting functions in ggplot2
+library(rstatix)      # For statistical tests and adding significance markers
+library(knitr)        # For displaying tibbles in a nice table format
+library(kableExtra)   # For enhancing table formatting
+```
+
+
+# Load data
+```{r}
+# Load hormonal data
+PP_hormones <- read_excel("Data/Data.xlsx", sheet = "PP_hormones")
+Nec_hormones <- read_excel("Data/Data.xlsx", sheet = "Nec_hormones")
+
+# Load pig information
+PigInfo <- read_excel("Data/Data.xlsx", sheet = "PigInfo")
+```
+
+# Data organization
+```{r}
+PP.data <- PP_hormones %>% inner_join(PigInfo, by = "PigID") %>%
+                             mutate(Day = "Day 11 or 12") %>%
+                             select(Diet, Day, Cortisol, TimePoint)
+
+Nec.data <- Nec_hormones %>% inner_join(PigInfo, by = "PigID") %>%
+              mutate(Day = "Day 16") %>%
+              mutate(TimePoint = "") %>%
+              select(Diet, Day, Cortisol, TimePoint)
+
+```
+
+```{r}
+# Combine postprandial and necropsy data
+All.data <- bind_rows(PP.data, Nec.data) %>% 
+              mutate(Diet = factor(Diet, levels = c("ALAC", "WPI", "SF"))) %>% 
+              mutate(TimePoint = factor(TimePoint, levels = c("baseline", "30 min", "60 min", "120 min")))
+```
+
+# Plotting cortisol levels by diet and time point
+```{r fig.width=6, fig.height=4}
+Fig <- All.data %>% ggerrorplot(x = "TimePoint", y = "Cortisol", color = "Diet", 
+                      palette = c("turquoise3","purple", "orange"),
+                      na.rm = TRUE, xlab = "", 
+                      ylab ="Cortisol (ug/L)",  add = "mean_se", position = position_dodge(0.6)) +
+                    facet_nested(.~ Day , scales = "free", space = "free_x") + 
+                    theme_classic() 
+
+Fig
+
+# Save the figure in pdf format
+ggsave(plot=Fig, height=4, width=6, dpi=300, filename="Figure 6/Fig6C.pdf", useDingbats=FALSE)
+```
+
+# Group difference evaluation
+```{r}
+All.data %>% group_by(TimePoint) %>%
+               wilcox_test(Cortisol ~ Diet, p.adjust.method = "none", paired = FALSE) %>% # Perform Wilcoxon test (Mann-Whitney U test)
+               select(-p.adj) %>%
+               add_significance(cutpoints = c(0, 0.05, 0.1,  1), symbols = c("*", "#", "ns")) %>%
+               select(TimePoint, group1, group2, p, p.signif) %>%
+               kable() %>% # Print the tibble in a nicely formatted table
+               kable_styling(bootstrap_options = c("striped", "hover")) # Enhance table formatting with kableExtra
+```
+
+
+```{r}
+sessionInfo()
+```
