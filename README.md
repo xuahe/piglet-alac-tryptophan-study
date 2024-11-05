@@ -1,4 +1,4 @@
-## Analysis of α-Lactalbumin Impact on Tryptophan Metabolism
+## Understand the impact of α-Lactalbumin on Infant Tryptophan Metabolism
 This repository contains R scripts used for data analysis in "The role of α-lactalbumin in modulating tryptophan metabolism and serotonin synthesis: insights from neonatal piglets"
 
 ### Data file:
