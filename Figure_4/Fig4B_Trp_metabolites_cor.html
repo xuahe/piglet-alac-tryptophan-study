@@ -11,7 +11,7 @@
 
 <meta name="author" content="Xuan He" />
 
-<meta name="date" content="2024-10-17" />
+<meta name="date" content="2024-12-22" />
 
 <title>Fig4B. Trp metabolites correlation</title>
 
@@ -576,7 +576,7 @@ display: none;
 
 <h1 class="title toc-ignore">Fig4B. Trp metabolites correlation</h1>
 <h4 class="author">Xuan He</h4>
-<h4 class="date">October 17, 2024</h4>
+<h4 class="date">December 22, 2024</h4>
 
 </div>
 
@@ -635,8 +635,8 @@ Nec_metadata &lt;- read_excel(&quot;Data/Data.xlsx&quot;, sheet = &quot;Nec_meta
 <h1>Data organization</h1>
 <pre class="r"><code># Define the list of metabolites for each tissue/biofluid type
 ls.serum.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &quot;Quinolinate&quot;, &quot;Niacinamide&quot;, &quot;Serotonin&quot;)
-ls.liver.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &quot;Quinolinate&quot;, &quot;Niacinamide&quot;, &quot;NAD+&quot;, &quot;Serotonin&quot;)
-ls.brain.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &quot;Quinolinate&quot;, &quot;Serotonin&quot;)
+ls.liver.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &quot;Niacinamide&quot;, &quot;NAD+&quot;, &quot;Serotonin&quot;)
+ls.brain.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Kynurenine&quot;, &quot;Serotonin&quot;)
 ls.urine.metabolites &lt;- c(&quot;Tryptophan&quot;, &quot;Quinolinate&quot;, &quot;Niacinamide&quot;, &quot;1-Methylnicotinamide&quot;, &quot;3-Indoxylsulfate&quot;, &quot;N-Methyl-2-pyridone-5-carboxamide&quot;)</code></pre>
 <pre class="r"><code>Data.serum &lt;- Serum %&gt;% 
                 select(PigID, all_of(ls.serum.metabolites)) %&gt;%
@@ -713,18 +713,13 @@ pairs_to_keep &lt;- data.frame(
   
                     # relationships relate to kynurenine pathway in brain:
                     bind_rows(c(var1 = &quot;Hippocampus_Tryptophan&quot;, var2 = &quot;Hippocampus_Kynurenine&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;Hippocampus_Kynurenine&quot;, var2 = &quot;Hippocampus_Quinolinate&quot;)) %&gt;%
                     bind_rows(c(var1 = &quot;Hypothalamus_Tryptophan&quot;, var2 = &quot;Hypothalamus_Kynurenine&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;Hypothalamus_Kynurenine&quot;, var2 = &quot;Hypothalamus_Quinolinate&quot;)) %&gt;%
                     bind_rows(c(var1 = &quot;PFC_Tryptophan&quot;, var2 = &quot;PFC_Kynurenine&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;PFC_Kynurenine&quot;, var2 = &quot;PFC_Quinolinate&quot;)) %&gt;%
                     bind_rows(c(var1 = &quot;Striatum_Tryptophan&quot;, var2 = &quot;Striatum_Kynurenine&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;Striatum_Kynurenine&quot;, var2 = &quot;Striatum_Quinolinate&quot;)) %&gt;%
-                    
+
                     # relationships relate to kynurenine pathway in liver:
                     bind_rows(c(var1 = &quot;Liver_Tryptophan&quot;, var2 = &quot;Liver_Kynurenine&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;Liver_Kynurenine&quot;, var2 = &quot;Liver_Quinolinate&quot;)) %&gt;%
-                    bind_rows(c(var1 = &quot;Liver_Quinolinate&quot;, var2 = &quot;Liver_NAD+&quot;)) %&gt;%
+                    bind_rows(c(var1 = &quot;Liver_Kynurenine&quot;, var2 = &quot;Liver_NAD+&quot;)) %&gt;%
   
                     # relationship between NAD+ and urine tryptophan metabolites
                     bind_rows(c(var1 = &quot;Liver_NAD+&quot;, var2 = &quot;Urine_1-Methylnicotinamide&quot;)) %&gt;%
@@ -739,8 +734,7 @@ pairs_to_keep &lt;- data.frame(
                     # relationships relate to serum kynurenine and liver kynurenine
                     bind_rows(c(var1 = &quot;Serum_Kynurenine&quot;, var2 = &quot;Liver_Kynurenine&quot;)) %&gt;%
 
-                    # relationships relate to serum quinolinate and liver &amp; urine quinolinate
-                    bind_rows(c(var1 = &quot;Serum_Quinolinate&quot;, var2 = &quot;Liver_Quinolinate&quot;)) %&gt;%
+                    # relationships relate to serum quinolinate and  urine quinolinate
                     bind_rows(c(var1 = &quot;Serum_Quinolinate&quot;, var2 = &quot;Urine_Quinolinate&quot;)) 
                     
   
@@ -787,7 +781,7 @@ Liver_Tryptophan
 0.50
 </td>
 <td style="text-align:right;">
-1154
+1154.0000
 </td>
 <td style="text-align:right;">
 0.014200
@@ -810,7 +804,7 @@ Hippocampus_Tryptophan
 0.58
 </td>
 <td style="text-align:right;">
-960
+960.0000
 </td>
 <td style="text-align:right;">
 0.003340
@@ -833,7 +827,7 @@ Hypothalamus_Tryptophan
 0.41
 </td>
 <td style="text-align:right;">
-1362
+1362.0000
 </td>
 <td style="text-align:right;">
 0.049000
@@ -856,7 +850,7 @@ PFC_Tryptophan
 0.65
 </td>
 <td style="text-align:right;">
-796
+796.0000
 </td>
 <td style="text-align:right;">
 0.000711
@@ -879,7 +873,7 @@ Striatum_Tryptophan
 0.59
 </td>
 <td style="text-align:right;">
-946
+946.0000
 </td>
 <td style="text-align:right;">
 0.002960
@@ -902,7 +896,7 @@ Urine_Tryptophan
 0.41
 </td>
 <td style="text-align:right;">
-1360
+1360.0000
 </td>
 <td style="text-align:right;">
 0.048500
@@ -925,7 +919,7 @@ Urine_3-Indoxylsulfate
 -0.43
 </td>
 <td style="text-align:right;">
-3282
+3282.0000
 </td>
 <td style="text-align:right;">
 0.038600
@@ -942,45 +936,22 @@ Spearman
 Serum_Quinolinate
 </td>
 <td style="text-align:left;">
-Liver_Quinolinate
-</td>
-<td style="text-align:right;">
-0.43
-</td>
-<td style="text-align:right;">
-1310
-</td>
-<td style="text-align:right;">
-0.036900
-</td>
-<td style="text-align:left;">
-Spearman
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Serum_Quinolinate
-</td>
-<td style="text-align:left;">
 Urine_Quinolinate
 </td>
 <td style="text-align:right;">
-0.54
+0.63
 </td>
 <td style="text-align:right;">
-1056
+849.1063
 </td>
 <td style="text-align:right;">
-0.007130
+0.000950
 </td>
 <td style="text-align:left;">
 Spearman
 </td>
 <td style="text-align:left;">
-**
+***
 </td>
 </tr>
 <tr>
@@ -994,7 +965,7 @@ Urine_1-Methylnicotinamide
 0.63
 </td>
 <td style="text-align:right;">
-860
+860.0000
 </td>
 <td style="text-align:right;">
 0.001360
@@ -1017,7 +988,7 @@ Urine_N-Methyl-2-pyridone-5-carboxamide
 0.50
 </td>
 <td style="text-align:right;">
-1154
+1154.0000
 </td>
 <td style="text-align:right;">
 0.014200
@@ -1029,33 +1000,8 @@ Spearman
 <ul>
 <li></td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Striatum_Kynurenine
-</td>
-<td style="text-align:left;">
-Striatum_Quinolinate
-</td>
-<td style="text-align:right;">
--0.44
-</td>
-<td style="text-align:right;">
-3308
-</td>
-<td style="text-align:right;">
-0.033300
-</td>
-<td style="text-align:left;">
-Spearman
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
 </tbody>
 </table></li>
-</ul></li>
-</ul></li>
 </ul></li>
 </ul></li>
 </ul></li>
