@@ -9,6 +9,7 @@ https://doi.org/10.1038/s41538-025-00497-6
 
 #### Figure 1:
 [Fig1A](https://xuahe.github.io/piglet-alac-tryptophan-study/Figure_1/Fig1A_Formula_comp.html)
+https://github.com/xuahe/piglet-alac-tryptophan-study/blob/main/Figure_1/Fig1A_Formula_comp.html
 
 #### Figure 2:
 [Fig2A-E](https://xuahe.github.io/piglet-alac-tryptophan-study/Figure_2/Fig2A-E_Postprandial_response.html), 
