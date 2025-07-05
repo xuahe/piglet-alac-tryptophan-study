@@ -44,7 +44,6 @@ https://doi.org/10.1038/s41538-025-00497-6
 [SI Fig4](https://xuahe.github.io/piglet-alac-tryptophan-study/SI_Figure_4/SI.Fig4_Postprandial_metabolome_PCA.html), 
 [SI Fig5](https://xuahe.github.io/piglet-alac-tryptophan-study/SI_Figure_5/SI.Fig5_Postprandial_Trp_individual_lineplots.html), 
 [SI Fig6](https://xuahe.github.io/piglet-alac-tryptophan-study/SI_Figure_6/SI.Fig6_Overall_metabolome_difference_PCA.html), 
-[SI Fig7](https://xuahe.github.io/piglet-alac-tryptophan-study/SI_Figure_7/SI.Fig7_Brain_quinolinate.html), 
 [SI Table3](https://xuahe.github.io/piglet-alac-tryptophan-study/SI_Table_3/SI.Table3_organ_weight.html)
 
 
